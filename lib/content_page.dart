@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/demo/demo_state_widget.dart';
+import 'package:flutter_app/demo/demo_widget.dart';
 
 class ContentPage extends StatefulWidget {
   @override
@@ -20,8 +22,8 @@ class _ContentPageState extends State<ContentPage> {
             child: PageView(
           controller: _pageController,
           children: <Widget>[
-            getPageContent(0),
-            getPageContent(1),
+            new DemoWidget(null),
+            new DemoStateWidget("原值"),
             getPageContent(2),
             getPageContent(3),
           ],
