@@ -23,4 +23,9 @@ class _DemoPageWidgetState extends State<DemoPageWidget> {
       ),
     );
   }
+  //api 网络请求
+  //modules 数据封装
+  //page 页面
+  //widgets 自定义组件
+  //common 公共组件
 }

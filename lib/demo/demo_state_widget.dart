@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/boy/pages/login_page.dart';
 import 'package:flutter_app/demo/demo_page_widget.dart';
 
 class DemoStateWidget extends StatefulWidget {
@@ -20,7 +21,7 @@ class _DemoStateWidgetState extends State<DemoStateWidget> {
   @override
   void initState() {
     super.initState();
-    new Future.delayed(Duration(seconds: 10), () {
+    new Future.delayed(Duration(seconds: 5), () {
       setState(() {
         text = "这就是变化的值";
       });
@@ -126,7 +127,7 @@ class _DemoStateWidgetState extends State<DemoStateWidget> {
           onPressed: () {
             print("点击了");
             Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-              return new DemoPageWidget();
+              return new LoginPage();
             }));
           },
           child: Padding(

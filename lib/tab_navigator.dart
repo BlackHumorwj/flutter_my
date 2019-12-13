@@ -25,7 +25,7 @@ class _TabNavigatorState extends State<TabNavigator> {
         child: ContentPage(),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed, //title 一直存在
+        type: BottomNavigationBarType.fixed, //bottom title 一直存在
         currentIndex: _currentIndex,
         items: [
           _bottomItem("本周", Icons.folder, 0),
@@ -56,6 +56,7 @@ class _TabNavigatorState extends State<TabNavigator> {
         ));
   }
 
+  //点击事件
   void onTabTapped(int index) {
     //修改页面状态 ，会重新调用build()方法
     setState(() {
