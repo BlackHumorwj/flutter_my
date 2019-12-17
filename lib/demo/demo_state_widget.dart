@@ -154,7 +154,6 @@ class _DemoStateWidgetState extends State<DemoStateWidget> {
                 RichText(
                   text: TextSpan(),
                 ),
-                TextField()
               ],
             ),
           ),
