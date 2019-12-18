@@ -5,6 +5,7 @@ import 'package:flutter_app/boy/common/DialogUtils.dart';
 import 'dart:convert';
 
 import 'package:flutter_app/boy/pages/reg_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //登录页面
 class LoginPage extends StatefulWidget {
@@ -120,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                     _account_text = _accountEditingController.text;
                     _psw_text = _pswEditingController.text;
 
-                    _login(_account_text, _psw_text);
+                    _loginSp(_account_text, _psw_text);
                   },
                 ),
               )
@@ -151,5 +152,24 @@ class _LoginPageState extends State<LoginPage> {
         DialogUtils.show(context, "提示", "登录失败，${response['returnMsg']}");
       }
     });
+  }
+
+  void _loginSp(String account, String psw) async {
+    if (account.isEmpty || psw.isEmpty) {
+      DialogUtils.show(context, "提示", "账号密码不能为空");
+      return;
+    }
+
+    //获取实例
+    var spInstance = await SharedPreferences.getInstance();
+    var _preAccount = spInstance.getString('account') ?? '';
+    var _prePsw = spInstance.getString('psw') ?? '';
+
+    //判断
+    if (_preAccount == account && _prePsw == psw) {
+      DialogUtils.show(context, "提示", "登录成功");
+    }else{
+      DialogUtils.show(context, "提示", "登录失败");
+    }
   }
 }

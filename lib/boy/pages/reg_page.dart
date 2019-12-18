@@ -1,4 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_app/boy/common/DialogUtils.dart';
+import 'package:flutter_app/boy/common/ToastUtils.dart';
+import 'package:flutter_app/boy/pages/login_page.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegPage extends StatefulWidget {
   @override
@@ -6,6 +13,11 @@ class RegPage extends StatefulWidget {
 }
 
 class _RegPageState extends State<RegPage> {
+  TextEditingController _accountController = TextEditingController();
+  TextEditingController _nickNameController = TextEditingController();
+  TextEditingController _pswController = TextEditingController();
+  File imageHead = null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,17 +33,30 @@ class _RegPageState extends State<RegPage> {
           child: Column(
             children: <Widget>[
               GestureDetector(
-                child: ClipRRect(
-                  //头像
-                  borderRadius: BorderRadius.all(Radius.circular(50)),
-                  child: Image.asset(
-                    "assets/test.jpeg",
-                    fit: BoxFit.fill,
-                    height: 60,
-                    width: 60,
-                  ),
-                ),
-                onTap: () {},
+                child: imageHead == null
+                    ? ClipRRect(
+                        //头像
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        child: Image.asset(
+                          "assets/test.jpeg",
+                          fit: BoxFit.fill,
+                          height: 60,
+                          width: 60,
+                        ),
+                      )
+                    : ClipRRect(
+                        //头像
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        child: Image.file(
+                          imageHead,
+                          fit: BoxFit.fill,
+                          height: 60,
+                          width: 60,
+                        ),
+                      ),
+                onTap: () {
+                  getAvatarImage();
+                },
               ),
               Container(
                 margin: EdgeInsets.only(top: 10),
@@ -48,13 +73,16 @@ class _RegPageState extends State<RegPage> {
                 ),
               ),
               TextField(
+                controller: _accountController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(hintText: "请输入11位手机号"),
               ),
               TextField(
+                controller: _nickNameController,
                 decoration: InputDecoration(hintText: "请输入您的昵称"),
               ),
               TextField(
+                controller: _pswController,
                 obscureText: true,
                 decoration: InputDecoration(hintText: "请输入6位密码"),
               ),
@@ -71,7 +99,10 @@ class _RegPageState extends State<RegPage> {
                     '注册',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _doReg(_accountController.text, _nickNameController.text,
+                        _pswController.text);
+                  },
                 ),
               )
             ],
@@ -79,5 +110,45 @@ class _RegPageState extends State<RegPage> {
         ),
       ),
     );
+  }
+
+  void _doReg(String account, String nickName, String psw) async {
+    if (account.isEmpty || nickName.isEmpty || psw.isEmpty) {
+      DialogUtils.show(context, '提示', '内容不能为空');
+      return;
+    }
+
+    //todo 获取实例
+    var spInstance = await SharedPreferences.getInstance();
+    await spInstance.setString('account', account);
+    await spInstance.setString('psw', psw);
+    await spInstance.setString('nickName', nickName);
+
+    if (imageHead != null && imageHead.path.isNotEmpty) {
+      await spInstance.setString('imageHead', imageHead.path);
+    }
+
+    ToastUtils.toast('注册成功');
+
+//    DialogUtils.showAndPress(context, '提示', '注册成功', () {
+//
+//      //关闭弹窗
+//      Navigator.pop(context);
+//
+//
+//      //todo 退出当前页面
+//      Navigator.pushAndRemoveUntil(
+//          context,
+//          MaterialPageRoute(builder: (context) => new LoginPage()),
+//          (route) => route == null);
+//    });
+  }
+
+  //TODO 选择头像
+  Future<File> getAvatarImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      imageHead = image;
+    });
   }
 }
