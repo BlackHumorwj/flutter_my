@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/boy/api/Api.dart';
 import 'package:flutter_app/boy/api/NetUtils.dart';
 import 'package:flutter_app/boy/common/DialogUtils.dart';
+import 'package:flutter_app/boy/main_page.dart';
 import 'dart:convert';
 
 import 'package:flutter_app/boy/pages/reg_page.dart';
@@ -167,8 +168,12 @@ class _LoginPageState extends State<LoginPage> {
 
     //判断
     if (_preAccount == account && _prePsw == psw) {
-      DialogUtils.show(context, "提示", "登录成功");
-    }else{
+      // DialogUtils.show(context, "提示", "登录成功");
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainPage()),
+          (route) => route == null);
+    } else {
       DialogUtils.show(context, "提示", "登录失败");
     }
   }
